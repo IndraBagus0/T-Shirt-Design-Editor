@@ -16,10 +16,10 @@ export default {
         '1600px': '1600px',
       },
       height: {
-        'tinggiGambar': '575px',
+        'tinggiGambar': '548px',
       },
       width: {
-        'lebarGambar': '575px',
+        'lebarGambar': '452px',
       },
     },
   },

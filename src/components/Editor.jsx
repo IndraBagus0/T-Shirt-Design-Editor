@@ -1,9 +1,18 @@
+//src/components/Editor.jsx
 import React, { useState } from 'react';
 import ColorPicker from './ColorPicker';
 import ImageUploader from './ImageUploader';
 import TextInput from './TextInput';
 
-const Editor = ({ color, handleColorChange, handleImageUpload, text, handleTextChange, colors }) => {
+const Editor = ({
+  color,
+  handleColorChange,
+  handleImageUpload,
+  handleTextChange,
+  handleAddText,
+  text,
+  colors
+}) => {
   const [activeTab, setActiveTab] = useState('product');
 
   const handleTabChange = (tab) => {
@@ -60,7 +69,11 @@ const Editor = ({ color, handleColorChange, handleImageUpload, text, handleTextC
         <ImageUploader handleImageUpload={handleImageUpload} />
       )}
       {activeTab === 'addText' && (
-        <TextInput text={text} handleTextChange={handleTextChange} />
+        <TextInput
+          text={text}
+          handleTextChange={handleTextChange}
+          handleAddText={handleAddText}
+        />
       )}
       {activeTab === 'saveDesign' && <div>Save/Load Component</div>}
       {activeTab === 'quoteBuy' && <div>Quote/Buy Component</div>}

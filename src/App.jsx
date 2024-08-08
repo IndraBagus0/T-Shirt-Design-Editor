@@ -1,3 +1,4 @@
+//src/App.jsx
 import React, { useState } from 'react';
 import TShirtEditor from './components/TShirtEditor';
 import Editor from './components/Editor';
@@ -8,6 +9,8 @@ export default function App() {
   const [image, setImage] = useState('');
   const [text, setText] = useState(''); 
   const [isFrontView, setIsFrontView] = useState(true); 
+  const [frontTextObjects, setFrontTextObjects] = useState([]);
+  const [backTextObjects, setBackTextObjects] = useState([]);
 
   const handleColorChange = (newColor) => {
     setColor(newColor); 
@@ -18,12 +21,28 @@ export default function App() {
   };
 
   const handleTextChange = (e) => {
-    console.log('Text input changed:', e.target.value);
     setText(e.target.value);
   };
 
+  const handleAddText = () => {
+    const textObject = {
+      text: text,
+      left: 100,
+      top: 100,
+      fontSize: 20,
+      fill: "#000"
+    };
+
+    if (isFrontView) {
+      setFrontTextObjects(prev => [...prev, textObject]);
+    } else {
+      setBackTextObjects(prev => [...prev, textObject]);
+    }
+    setText('');
+  };
+
   const toggleView = () => {
-    setIsFrontView((prevView) => !prevView);
+    setIsFrontView(prevView => !prevView);
   };
 
   return (
@@ -32,11 +51,10 @@ export default function App() {
         <div className="flex-1">
           <TShirtEditor
             color={color} 
-            handleColorChange={handleColorChange} 
-            image={image} 
-            text={text} 
-            isFrontView={isFrontView} 
-            toggleView={toggleView}
+            currentSide={isFrontView ? 'front' : 'back'}
+            frontTextObjects={frontTextObjects}
+            backTextObjects={backTextObjects}
+            handleToggleSide={toggleView}
           />
         </div>
         <div className="w-1/2 p-4">
@@ -47,6 +65,7 @@ export default function App() {
             handleImageUpload={handleImageUpload} 
             text={text} 
             handleTextChange={handleTextChange} 
+            handleAddText={handleAddText}
             colors={colors}
           />
         </div>

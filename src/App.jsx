@@ -1,7 +1,5 @@
-// src/App.jsx
-
 import React, { useState } from 'react';
-import TShirtDisplay from './components/TShirtDisplay';
+import TShirtEditor from './components/TShirtEditor';
 import Editor from './components/Editor';
 import { colors } from './components';
 
@@ -20,6 +18,7 @@ export default function App() {
   };
 
   const handleTextChange = (e) => {
+    console.log('Text input changed:', e.target.value);
     setText(e.target.value);
   };
 
@@ -31,8 +30,9 @@ export default function App() {
     <div className="flex h-screen items-center justify-center">
       <div className="w-full max-w-[1600px] flex">
         <div className="flex-1">
-          <TShirtDisplay
+          <TShirtEditor
             color={color} 
+            handleColorChange={handleColorChange} 
             image={image} 
             text={text} 
             isFrontView={isFrontView} 

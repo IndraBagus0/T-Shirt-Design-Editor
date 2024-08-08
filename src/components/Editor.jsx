@@ -53,9 +53,15 @@ const Editor = ({ color, handleColorChange, handleImageUpload, text, handleTextC
         </table>
       </div>
 
-      {activeTab === 'product' && <ColorPicker color={color} handleColorChange={handleColorChange} colors={colors} />}
-      {activeTab === 'addImage' && <ImageUploader handleImageUpload={handleImageUpload} />}
-      {activeTab === 'addText' && <TextInput text={text} handleTextChange={handleTextChange} />}
+      {activeTab === 'product' && (
+        <ColorPicker color={color} handleColorChange={handleColorChange} colors={colors} />
+      )}
+      {activeTab === 'addImage' && (
+        <ImageUploader handleImageUpload={handleImageUpload} />
+      )}
+      {activeTab === 'addText' && (
+        <TextInput text={text} handleTextChange={handleTextChange} />
+      )}
       {activeTab === 'saveDesign' && <div>Save/Load Component</div>}
       {activeTab === 'quoteBuy' && <div>Quote/Buy Component</div>}
     </div>

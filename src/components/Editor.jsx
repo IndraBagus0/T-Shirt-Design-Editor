@@ -1,5 +1,4 @@
-//src/components/Editor.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import ColorPicker from './ColorPicker';
 import ImageUploader from './ImageUploader';
 import TextInput from './TextInput';
@@ -11,9 +10,10 @@ const Editor = ({
   handleTextChange,
   handleAddText,
   text,
-  colors
+  colors,
+  currentSide
 }) => {
-  const [activeTab, setActiveTab] = useState('product');
+  const [activeTab, setActiveTab] = React.useState('product');
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -76,7 +76,6 @@ const Editor = ({
         />
       )}
       {activeTab === 'saveDesign' && <div>Save/Load Component</div>}
-      {activeTab === 'quoteBuy' && <div>Quote/Buy Component</div>}
     </div>
   );
 };

@@ -1,23 +1,17 @@
-//src/App.jsx
 import React, { useState } from 'react';
 import TShirtEditor from './components/TShirtEditor';
 import Editor from './components/Editor';
 import { colors } from './components';
 
 export default function App() {
-  const [color, setColor] = useState('#FFFFFF'); 
-  const [image, setImage] = useState('');
-  const [text, setText] = useState(''); 
-  const [isFrontView, setIsFrontView] = useState(true); 
+  const [color, setColor] = useState('#FFFFFF');
+  const [text, setText] = useState('');
+  const [isFrontView, setIsFrontView] = useState(true);
   const [frontTextObjects, setFrontTextObjects] = useState([]);
   const [backTextObjects, setBackTextObjects] = useState([]);
 
   const handleColorChange = (newColor) => {
-    setColor(newColor); 
-  };
-
-  const handleImageUpload = (imageData) => {
-    setImage(imageData);
+    setColor(newColor);
   };
 
   const handleTextChange = (e) => {
@@ -50,7 +44,7 @@ export default function App() {
       <div className="w-full max-w-[1600px] flex">
         <div className="flex-1">
           <TShirtEditor
-            color={color} 
+            color={color}
             currentSide={isFrontView ? 'front' : 'back'}
             frontTextObjects={frontTextObjects}
             backTextObjects={backTextObjects}
@@ -61,12 +55,12 @@ export default function App() {
           <h2 className="text-lg font-bold mb-4">Editor</h2>
           <Editor
             color={color}
-            handleColorChange={handleColorChange} 
-            handleImageUpload={handleImageUpload} 
-            text={text} 
-            handleTextChange={handleTextChange} 
+            handleColorChange={handleColorChange}
+            text={text}
+            handleTextChange={handleTextChange}
             handleAddText={handleAddText}
             colors={colors}
+            currentSide={isFrontView ? 'front' : 'back'}
           />
         </div>
       </div>

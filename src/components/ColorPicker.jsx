@@ -2,8 +2,8 @@ import React from 'react';
 
 const ColorPicker = ({ color, handleColorChange, colors }) => {
   return (
-    <div className="mb-4">
-      <label className="block mb-1">T-shirt Color:</label>
+    <div className="mb-4 border-gray-300 p-4 rounded">
+      <h2 className='mb-7 text-xl'>Select Your Design Color</h2>
       <div className="flex flex-wrap gap-2">
         {colors.map(({ title, hex }) => (
           <button

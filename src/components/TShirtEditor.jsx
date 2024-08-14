@@ -6,134 +6,136 @@ import backImage from "../assets/img/crew_back.png";
 const TShirtEditor = ({
   color,
   currentSide,
-  frontTextObjects,
-  backTextObjects,
   handleToggleSide,
 }) => {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [redoStack, setRedoStack] = useState([]);
-  const [isZoomedIn, setIsZoomedIn] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [textInput, setTextInput] = useState("");
+  const [isTextActive, setIsTextActive] = useState(false);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [frontObjects, setFrontObjects] = useState([]);
+  const [backObjects, setBackObjects] = useState([]);
 
   useEffect(() => {
     const canvasInstance = new fabric.Canvas(canvasRef.current, {
       width: 200,
-      height: 400,
+      height: 300,
       backgroundColor: "",
       selection: true,
     });
     setCanvas(canvasInstance);
-
-    // Save initial state
-    setHistory([canvasInstance.toJSON()]);
 
     return () => canvasInstance.dispose();
   }, []);
 
   useEffect(() => {
     if (canvas) {
-      const imageUrl = currentSide === "front" ? frontImage : backImage;
-
-      console.log("Loading image from URL:", imageUrl);
-
-      fabric.Image.fromURL(imageUrl, (img) => {
-        img.set({
-          scaleX: canvas.width / img.width,
-          scaleY: canvas.height / img.height,
-        });
-      
-        setBackgroundImage(img); // Save reference to background image
-        console.log("Background image set:", img); // Debugging line
-      
+      const updateCanvas = () => {
+        // Clear current canvas
+        // canvas.clear();
         canvas.clear();
-        canvas.add(img);
-        canvas.renderAll();
       
-        // Add text objects
-        const textObjects =
-          currentSide === "front" ? frontTextObjects : backTextObjects;
-      
-        textObjects.forEach((text) => {
-          const textObj = new fabric.Textbox(text.text, {
-            left: text.left,
-            top: text.top,
-            fontSize: text.fontSize,
-            fill: text.fill,
-            originX: "left",
-            originY: "top",
+        // Set new image based on current side
+        const imageUrl = currentSide === "front" ? frontImage : backImage;
+        fabric.Image.fromURL(imageUrl, (img) => {
+          img.set({
+            scaleX: canvas.width / img.width,
+            scaleY: canvas.height / img.height,
           });
-          canvas.add(textObj);
-        });
       
-        canvas.renderAll();
+          canvas.add(img);
+          setCurrentImage(img);
       
-        // Save the state after rendering
-        saveCanvasState();
-      }, (err) => {
-        console.error("Error loading image:", err);
-      });
+          // Load and add saved objects for the current side, regardless of changes
+          const objectsToLoad = currentSide === "front" ? frontObjects : backObjects;
+          objectsToLoad.forEach((obj) => {
+            let newObject;
+            if (obj.type === "textbox") {
+              newObject = new fabric.Textbox(obj.text, {
+                left: obj.left,
+                top: obj.top,
+                fontSize: obj.fontSize,
+                fill: obj.fill,
+                originX: "left",
+                originY: "top",
+              });
+            } else {
+              // Handle other object types (if applicable)
+              console.warn(`Unsupported object type: ${obj.type}`);
+            }
       
-    }
-  }, [currentSide, canvas, frontTextObjects, backTextObjects]);
-
-  const saveCanvasState = () => {
-    if (canvas) {
-      setHistory((prevHistory) => [...prevHistory, canvas.toJSON()]);
-      setRedoStack([]); // Clear redo stack on new action
-    }
-  };
-
-  const handleUndo = () => {
-    if (history.length > 1) {
-      setRedoStack((prevRedoStack) => [history.pop(), ...prevRedoStack]);
-      setHistory((prevHistory) => {
-        const newHistory = prevHistory.slice(0, -1);
-        canvas.loadFromJSON(newHistory[newHistory.length - 1], () => {
+            if (newObject) {
+              newObject.on("moving", () => setIsTextActive(true));
+              newObject.on("scaling", () => setIsTextActive(true));
+              newObject.on("rotating", () => setIsTextActive(true));
+              newObject.on("modified", () => setIsTextActive(false));
+      
+              canvas.add(newObject);
+            }
+          });
+      
           canvas.renderAll();
         });
-        return newHistory;
-      });
-    }
-  };
+      };
 
-  const handleRedo = () => {
-    if (redoStack.length > 0) {
-      const [latestRedo, ...newRedoStack] = redoStack;
-      setHistory((prevHistory) => [...prevHistory, latestRedo]);
-      setRedoStack(newRedoStack);
-      canvas.loadFromJSON(latestRedo, () => {
-        canvas.renderAll();
-      });
+      updateCanvas();
     }
-  };
+  }, [currentSide, canvas, frontObjects, backObjects]);
 
-  const toggleZoom = () => {
-    if (canvas && backgroundImage) {
-      const zoomFactor = isZoomedIn ? 1 / 1.5 : 1.5; // Zoom out or in
-      console.log("Zooming with factor:", zoomFactor);
-  
-      // Check if backgroundImage is correctly set
-      console.log("Background Image:", backgroundImage);
-  
-      // Apply zoom
-      backgroundImage.scaleX *= zoomFactor;
-      backgroundImage.scaleY *= zoomFactor;
-  
-      console.log("Updated ScaleX:", backgroundImage.scaleX);
-      console.log("Updated ScaleY:", backgroundImage.scaleY);
-  
+  const handleAddText = () => {
+    if (canvas && textInput.trim()) {
+      const textObj = new fabric.Textbox(textInput, {
+        left: 50,
+        top: 50,
+        fontSize: 20,
+        fill: "#000",
+        originX: "left",
+        originY: "top",
+      });
+
+      textObj.on("moving", () => setIsTextActive(true));
+      textObj.on("scaling", () => setIsTextActive(true));
+      textObj.on("rotating", () => setIsTextActive(true));
+      textObj.on("modified", () => setIsTextActive(false));
+
+      canvas.add(textObj);
+      canvas.setActiveObject(textObj);
+      textObj.enterEditing();
+
       canvas.renderAll();
-      setIsZoomedIn(!isZoomedIn);
+      setTextInput("");
+
+      console.log("Text added:", textInput);
     } else {
-      console.error("Canvas or Background Image not available:", {
-        canvas,
-        backgroundImage,
-      });
+      console.log("No text inputted or text input is empty");
     }
   };
-  
+
+  const handleToggleSideWrapper = () => {
+    if (canvas) {
+      // Save current canvas objects before switching
+      const currentObjects = canvas.getObjects().map(obj => ({
+        type: obj.type,
+        text: obj.text || '',
+        left: obj.left,
+        top: obj.top,
+        fontSize: obj.fontSize,
+        fill: obj.fill,
+      }));
+
+      if (currentSide === "front") {
+        setFrontObjects(currentObjects);
+        console.log("Front side objects saved:", currentObjects);
+      } else {
+        setBackObjects(currentObjects);
+        console.log("Back side objects saved:", currentObjects);
+      }
+
+      // Now switch the side
+      handleToggleSide();
+      console.log("Switching to", currentSide === "front" ? "Back" : "Front");
+    }
+  };
 
   return (
     <>
@@ -148,33 +150,36 @@ const TShirtEditor = ({
             alt="T-Shirt Background"
             className="object-cover h-tinggiGambar w-lebarGambar absolute z-0"
           />
-          <canvas ref={canvasRef} className="absolute z-20" />
+          <canvas
+            ref={canvasRef}
+            className="absolute z-20"
+            style={{
+              border: isTextActive ? "1px solid blue" : "none",
+            }}
+          />
         </div>
       </div>
       <div className="mt-4 flex justify-center space-x-4">
         <button
-          onClick={handleUndo}
-          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
-        >
-          Undo
-        </button>
-        <button
-          onClick={handleRedo}
-          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
-        >
-          Redo
-        </button>
-        <button
-          onClick={toggleZoom}
-          className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-700"
-        >
-          {isZoomedIn ? "Zoom Out" : "Zoom In"}
-        </button>
-        <button
-          onClick={handleToggleSide}
+          onClick={handleToggleSideWrapper}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
         >
           Switch to {currentSide === "front" ? "Back" : "Front"}
+        </button>
+      </div>
+      <div className="mt-4 flex justify-center space-x-4">
+        <input
+          type="text"
+          value={textInput}
+          onChange={(e) => setTextInput(e.target.value)}
+          className="px-4 py-2 border rounded-md"
+          placeholder="Enter text"
+        />
+        <button
+          onClick={handleAddText}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-700"
+        >
+          Add Text
         </button>
       </div>
     </>

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import TShirtEditor from './components/TShirtEditor';
-import Editor from './components/Editor';
-import { colors } from './components';
+//src/App.jsx
+import React, { useState } from "react";
+import TShirtEditor from "./components/TShirtEditor";
+import Editor from "./components/Editor";
+import { colors } from "./color/index";
 
 export default function App() {
-  const [color, setColor] = useState('#FFFFFF');
-  const [text, setText] = useState('');
-  const [isFrontView, setIsFrontView] = useState(true);
+  const [color, setColor] = useState("#FFFFFF");
+  const [text, setText] = useState("");
+  const [currentSide, setCurrentSide] = useState("front");
   const [frontTextObjects, setFrontTextObjects] = useState([]);
   const [backTextObjects, setBackTextObjects] = useState([]);
 
@@ -24,19 +25,19 @@ export default function App() {
       left: 100,
       top: 100,
       fontSize: 20,
-      fill: "#000"
+      fill: "#000",
     };
 
-    if (isFrontView) {
-      setFrontTextObjects(prev => [...prev, textObject]);
+    if (currentSide === "front") {
+      setFrontTextObjects((prev) => [...prev, textObject]);
     } else {
-      setBackTextObjects(prev => [...prev, textObject]);
+      setBackTextObjects((prev) => [...prev, textObject]);
     }
-    setText('');
+    setText("");
   };
 
-  const toggleView = () => {
-    setIsFrontView(prevView => !prevView);
+  const handleToggleSide = () => {
+    setCurrentSide((prev) => (prev === "front" ? "back" : "front"));
   };
 
   return (
@@ -45,10 +46,12 @@ export default function App() {
         <div className="flex-1">
           <TShirtEditor
             color={color}
-            currentSide={isFrontView ? 'front' : 'back'}
+            currentSide={currentSide}
             frontTextObjects={frontTextObjects}
+            setFrontTextObjects={setFrontTextObjects}
             backTextObjects={backTextObjects}
-            handleToggleSide={toggleView}
+            setBackTextObjects={setBackTextObjects}
+            handleToggleSide={handleToggleSide}
           />
         </div>
         <div className="w-1/2 p-4">
@@ -60,7 +63,7 @@ export default function App() {
             handleTextChange={handleTextChange}
             handleAddText={handleAddText}
             colors={colors}
-            currentSide={isFrontView ? 'front' : 'back'}
+            currentSide={currentSide}
           />
         </div>
       </div>

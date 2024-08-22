@@ -10,9 +10,11 @@
     background-color: whiteSmoke;
 }
 
-body {
-    padding-top: 60px;
-}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
 .color-preview {
     border: 1px solid #CCC;
@@ -111,8 +113,12 @@ body {
 .input-text {
     width: 100%;
     padding: 15px;
-    margin-bottom: 10px;
-
+    border: none; 
+    outline: none; 
+}
+.input-text:focus {
+    border: none;
+    box-shadow: none;
 }
 
 
@@ -121,9 +127,11 @@ body {
     border: none;
     margin-top: 10px;
     color: white;
-    padding: 15px 32px;
+    padding: 10px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
   }

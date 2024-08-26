@@ -1,7 +1,7 @@
 // js/tshirtEditor.js
 
 var canvas;
-var tshirts = new Array(); //prototype: [{style:'x',color:'white',front:'a',back:'b',price:{tshirt:'12.95',frontPrint:'4.99',backPrint:'4.99',total:'22.47'}}]
+var tshirts = new Array();
 var a;
 var b;
 var line1;
@@ -9,7 +9,7 @@ var line2;
 var line3;
 var line4;
 $(document).ready(function () {
-	//setup front side canvas 
+
 	canvas = new fabric.Canvas('tcanvas', {
 		hoverCursor: 'pointer',
 		selection: true,
@@ -25,7 +25,7 @@ $(document).ready(function () {
 		'object:selected': onObjectSelected,
 		'selection:cleared': onSelectedCleared
 	});
-	// piggyback on `canvas.findTarget`, to fire "object:over" and "object:out" events
+
 	canvas.findTarget = (function (originalFn) {
 		return function () {
 			var target = originalFn.apply(this, arguments);
@@ -46,23 +46,13 @@ $(document).ready(function () {
 		};
 	})(canvas.findTarget);
 
-	canvas.on('object:over', function (e) {
-		//e.target.setFill('red');
-		//canvas.renderAll();
-	});
-
-	canvas.on('object:out', function (e) {
-		//e.target.setFill('green');
-		//canvas.renderAll();
-	});
-
 	document.getElementById('add-text').onclick = function () {
 		var text = $("#text-string").val();
 		var textSample = new fabric.Text(text, {
 			left: canvas.getWidth() / 2,
 			top: canvas.getHeight() / 2,
-			originX: 'center',  // Center the text horizontally
-			originY: 'center',  // Center the text vertically
+			originX: 'center',
+			originY: 'center',
 			fontFamily: 'helvetica',
 			angle: 0,
 			fill: '#000000',
@@ -77,6 +67,7 @@ $(document).ready(function () {
 		$("#imageeditor").css('display', 'block');
 	};
 
+
 	$("#text-string").keyup(function () {
 		var activeObject = canvas.getActiveObject();
 		if (activeObject && activeObject.type === 'text') {
@@ -86,7 +77,6 @@ $(document).ready(function () {
 	});
 	$(".img-polaroid").click(function (e) {
 		var el = e.target;
-		/*temp code*/
 		var offset = 50;
 		var left = fabric.util.getRandomInt(0 + offset, 200 - offset);
 		var top = fabric.util.getRandomInt(0 + offset, 400 - offset);
@@ -103,7 +93,6 @@ $(document).ready(function () {
 				cornersize: 10,
 				hasRotatingPoint: true
 			});
-			//image.scale(getRandomNum(0.1, 0.25)).setCoords();
 			canvas.add(image);
 		});
 	});
@@ -150,6 +139,50 @@ $(document).ready(function () {
 			});
 		}
 	};
+	document.getElementById('imageUpload').onchange = function (e) {
+		var reader = new FileReader();
+		reader.onload = function (event) {
+			var imgObj = new Image();
+			imgObj.src = event.target.result;
+			imgObj.onload = function () {
+				// Create a fabric.Image instance
+				var image = new fabric.Image(imgObj);
+				
+				// Resize the image to fit within the canvas (or set a maximum size)
+				var canvasWidth = canvas.getWidth();
+				var canvasHeight = canvas.getHeight();
+	
+				// Set a maximum width or height (for example, 50px)
+				var maxWidth = 75;
+				var maxHeight = 75;
+	
+				// Calculate the scaling factor to maintain aspect ratio
+				var scaleFactor = Math.min(maxWidth / imgObj.width, maxHeight / imgObj.height);
+	
+				// Apply the scaling
+				image.scale(scaleFactor);
+	
+				// Position the image in the center of the canvas
+				image.set({
+					left: canvasWidth / 2,
+					top: canvasHeight / 2,
+					originX: 'center',
+					originY: 'center',
+					angle: 0,
+					padding: 10,
+					cornersize: 10,
+					hasRotatingPoint: true
+				});
+	
+				// Add the image to the canvas and set it as active
+				canvas.add(image);
+				canvas.setActiveObject(image);
+			}
+		}
+		reader.readAsDataURL(e.target.files[0]);
+	};
+	
+	
 	$("#text-bold").click(function () {
 		var activeObject = canvas.getActiveObject();
 		if (activeObject && activeObject.type === 'text') {
@@ -338,18 +371,20 @@ function onSelectedCleared(e) {
 	$("#imageeditor").css('display', 'none');
 }
 function setFont(fontName) {
-    var activeObject = canvas.getActiveObject();
-    if (activeObject && activeObject.type === 'text') {
-        activeObject.set("fontFamily", fontName);
-        canvas.renderAll();
-    }
-    $('#fontModal').modal('hide');
+	var activeObject = canvas.getActiveObject();
+	if (activeObject && activeObject.type === 'text') {
+		activeObject.set("fontFamily", fontName);
+		canvas.renderAll();
+	}
+	$('#fontModal').modal('hide');
 }
 function removeWhite() {
 	var activeObject = canvas.getActiveObject();
 	if (activeObject && activeObject.type === 'image') {
-		activeObject.filters[2] = new fabric.Image.filters.RemoveWhite({ hreshold: 100, distance: 10 });//0-255, 0-255
+		activeObject.filters[2] = new fabric.Image.filters.RemoveWhite({ hreshold: 100, distance: 10 });
 		activeObject.applyFilters(canvas.renderAll.bind(canvas));
 	}
 }
+
+
 

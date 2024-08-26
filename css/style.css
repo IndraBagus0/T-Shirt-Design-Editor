@@ -127,4 +127,35 @@ ul {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-  }
+}
+
+#imageUploadContainer {
+    display: inline-block;
+    position: relative;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#imageUploadContainer label {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#imageUploadContainer label:hover {
+    background-color: #2980b9;
+}
+
+#imageUpload {
+    display: none;
+}
+
+#imageUploadContainer input {
+    margin-top: 10px;
+}

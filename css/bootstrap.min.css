@@ -3810,9 +3810,10 @@ input[type="submit"].btn.btn-mini {
     clear: both;
 }
 
-.nav-tabs>li,
-.nav-pills>li {
-    float: left;
+.nav-tabs, .nav-pills {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
 }
 
 .nav-tabs>li>a,

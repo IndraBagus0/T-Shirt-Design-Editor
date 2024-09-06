@@ -1,0 +1,161 @@
+:root {
+    --Primary: #317eac;
+    --input-padding-y: .75rem;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+.color-preview {
+    border: 1px solid #CCC;
+    margin: 2px;
+    zoom: 1;
+    vertical-align: top;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+    width: 20px;
+    height: 20px;
+}
+
+.rotate {
+    --webkit-transform: rotate(90deg);
+    --moz-transform: rotate(90deg);
+    --o-transform: rotate(90deg);
+    --ms-transform: rotate(90deg);
+}
+
+.Arial {
+    font-family: "Arial";
+}
+
+.Helvetica {
+    font-family: "Helvetica";
+}
+
+.MyriadPro {
+    font-family: "Myriad Pro";
+}
+
+.Delicious {
+    font-family: "Delicious";
+}
+
+.Verdana {
+    font-family: "Verdana";
+}
+
+.Georgia {
+    font-family: "Georgia";
+}
+
+.Courier {
+    font-family: "Courier";
+}
+
+.ComicSansMS {
+    font-family: "Comic Sans MS";
+}
+
+.Impact {
+    font-family: "Impact";
+}
+
+.Monaco {
+    font-family: "Monaco";
+}
+
+.Optima {
+    font-family: "Optima";
+}
+
+.HoeflerText {
+    font-family: "Hoefler Text";
+}
+
+.Plaster {
+    font-family: "Plaster";
+}
+
+.Engagement {
+    font-family: "Engagement";
+}
+
+.span7 {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content horizontally */
+    justify-content: center; /* Centers content vertically */
+}
+
+.clearfix {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.input-append {
+    display: flex;
+    flex-direction: column; /* Stack the elements vertically */
+    align-items: center;
+    justify-content: center;
+}
+
+.input-text {
+    width: 100%;
+    padding: 15px;
+    border: none; 
+    outline: none; 
+}
+.input-text:focus {
+    border: none;
+    box-shadow: none;
+}
+
+
+.button-text {
+    background-color: var(--Primary); 
+    border: none;
+    margin-top: 10px;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#imageUploadContainer {
+    display: inline-block;
+    position: relative;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#imageUploadContainer label {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#imageUploadContainer label:hover {
+    background-color: #2980b9;
+}
+
+#imageUpload {
+    display: none;
+}
+
+#imageUploadContainer input {
+    margin-top: 10px;
+}

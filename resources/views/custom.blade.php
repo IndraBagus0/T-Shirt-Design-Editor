@@ -18,6 +18,10 @@
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
     <script type="text/javascript"></script>
     <link rel="stylesheet" href="css/style.css">
+
+    {{-- <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script> --}}
+
 </head>
 
 <body class="preview" data-spy="scroll" data-target=".subnav" data-offset="80">
@@ -26,6 +30,10 @@
         <section id="typography">
             <div class="page-header">
                 <h1>Customize T-Shirt</h1>
+                <button
+                    class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900">
+                    Button
+                </button>
             </div>
             <div class="row">
                 <div class="span7">
